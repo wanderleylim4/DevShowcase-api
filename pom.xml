@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://apache.org" xmlns:xsi="http://w3.org"
+	xsi:schemaLocation="http://apache.org https://apache.org">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.8</version> <!-- Compatível com a JDK 25 -->
+		<relativePath/>
+	</parent>
+
+	<groupId>br.com.sawa</groupId>
+	<artifactId>devshowcase-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>devshowcase-api</name>
+	<description>Plataforma DevShowcase API - Atividade 1</description>
+
+	<properties>
+		<java.version>25</java.version> <!-- Alinhado com a JDK 25 usada no VS Code -->
+	</properties>
+
+	<dependencies>
+		<!-- Requisito 4: Endpoints REST (Web) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Requisito 2 e 3: Persistência de Dados Relacional (JPA) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- Requisito 3: Validação de campos obrigatórios (@NotBlank, @URL) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!-- Banco de Dados em memória para os testes práticos no Postman -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Ferramenta para reiniciar o servidor automaticamente ao salvar -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Dependência de Testes padrão do Spring Boot -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

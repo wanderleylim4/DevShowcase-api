@@ -1,0 +1,13 @@
+# Maven / Gradle build outputs
+target/
+build/
+.gradle/
+
+# IDE e editor local
+.vscode/
+.idea/
+*.iml
+
+# Logs e temporários
+*.log
+.DS_Store
