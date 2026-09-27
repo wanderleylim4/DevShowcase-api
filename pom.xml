@@ -17,7 +17,7 @@
 	<description>Plataforma DevShowcase API - Atividade 1</description>
 
 	<properties>
-		<java.version>25</java.version> <!-- Alinhado com a JDK 25 usada no VS Code -->
+		<java.version>17</java.version> <!-- Alinhado com a JDK 25 usada no VS Code -->
 	</properties>
 
 	<dependencies>
