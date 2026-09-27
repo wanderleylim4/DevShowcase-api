@@ -1,4 +1,4 @@
-﻿package br.com.sawa.devshowcase_api.service;
+package br.com.sawa.devshowcase_api.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

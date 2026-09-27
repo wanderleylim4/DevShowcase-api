@@ -1,4 +1,4 @@
-﻿package br.com.sawa.devshowcase_api.controller;
+package br.com.sawa.devshowcase_api.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
