@@ -1,48 +1,62 @@
 ﻿package br.com.sawa.devshowcase_api.service;
 
+import br.com.sawa.devshowcase_api.dto.FeedbackRequestDTO;
+import br.com.sawa.devshowcase_api.dto.FeedbackResponseDTO;
+import br.com.sawa.devshowcase_api.dto.ProjectResponseDTO;
+import br.com.sawa.devshowcase_api.exception.ResourceNotFoundException;
+import br.com.sawa.devshowcase_api.model.Feedback;
+import br.com.sawa.devshowcase_api.model.Project;
+import br.com.sawa.devshowcase_api.repository.FeedbackRepository;
+import br.com.sawa.devshowcase_api.repository.ProjectRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import br.com.sawa.devshowcase_api.dto.ProjectRequestDTO;
-import br.com.sawa.devshowcase_api.dto.ProjectResponseDTO;
-import br.com.sawa.devshowcase_api.model.Project;
-import br.com.sawa.devshowcase_api.model.Profile;
-import br.com.sawa.devshowcase_api.model.Technology;
-import br.com.sawa.devshowcase_api.repository.ProjectRepository;
-import br.com.sawa.devshowcase_api.repository.ProfileRepository;
-import br.com.sawa.devshowcase_api.repository.TechnologyRepository;
-import java.util.List;
 
 @Service
 public class ProjectService {
-    private final ProjectRepository repository; 
-    private final ProfileRepository profileRepository; 
-    private final TechnologyRepository techRepository;
 
-    public ProjectService(ProjectRepository repository, ProfileRepository profileRepository, TechnologyRepository techRepository) {
-        this.repository = repository; 
-        this.profileRepository = profileRepository; 
-        this.techRepository = techRepository;
-    }
+    private final ProjectRepository projectRepository;
+    private final FeedbackRepository feedbackRepository;
 
-    @Transactional
-    public ProjectResponseDTO insert(ProjectRequestDTO dto) {
-        Profile profile = profileRepository.findById(dto.profileId())
-            .orElseThrow(() -> new RuntimeException("Perfil não encontrado"));
-
-        Project project = new Project(); 
-        project.setTitle(dto.title()); 
-        project.setRepositoryUrl(dto.repositoryUrl()); 
-        project.setProfile(profile);
-        
-        if (dto.technologyIds() != null) { 
-            List<Technology> techs = techRepository.findAllById(dto.technologyIds()); 
-            project.getTechnologies().addAll(techs); 
-        }
-        return new ProjectResponseDTO(repository.save(project));
+    public ProjectService(ProjectRepository projectRepository, FeedbackRepository feedbackRepository) {
+        this.projectRepository = projectRepository;
+        this.feedbackRepository = feedbackRepository;
     }
 
     @Transactional(readOnly = true)
-    public List<ProjectResponseDTO> findAll() { 
-        return repository.findAll().stream().map(ProjectResponseDTO::new).toList(); 
+    public Page<ProjectResponseDTO> findAll(String technology, Pageable pageable) {
+        Page<Project> projects = projectRepository.findByTechnology(technology, pageable);
+        return projects.map(ProjectResponseDTO::new);
+    }
+
+    @Transactional
+    public FeedbackResponseDTO addFeedback(Long projectId, FeedbackRequestDTO dto) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Projeto não encontrado com o ID: " + projectId));
+
+        Feedback feedback = new Feedback();
+        feedback.setRating(dto.rating());
+        feedback.setComment(dto.comment());
+        feedback.setProject(project);
+
+        feedback = feedbackRepository.save(feedback);
+
+        project.getFeedbacks().add(feedback);
+        project.updateAverageRating();
+        projectRepository.save(project);
+
+        return new FeedbackResponseDTO(feedback);
+    }
+
+    @Transactional
+    public ProjectResponseDTO upvote(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ResourceNotFoundException("Projeto não encontrado com o ID: " + projectId));
+
+        project.setUpvotes(project.getUpvotes() + 1);
+        project = projectRepository.save(project);
+
+        return new ProjectResponseDTO(project);
     }
 }

@@ -1,31 +1,45 @@
 ﻿package br.com.sawa.devshowcase_api.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import br.com.sawa.devshowcase_api.dto.ProjectRequestDTO;
+import br.com.sawa.devshowcase_api.dto.FeedbackRequestDTO;
+import br.com.sawa.devshowcase_api.dto.FeedbackResponseDTO;
 import br.com.sawa.devshowcase_api.dto.ProjectResponseDTO;
 import br.com.sawa.devshowcase_api.service.ProjectService;
 import jakarta.validation.Valid;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/projects")
 public class ProjectController {
 
-    private final ProjectService service;
+    private final ProjectService projectService;
 
-    public ProjectController(ProjectService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<ProjectResponseDTO> insert(@Valid @RequestBody ProjectRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.insert(dto));
+    public ProjectController(ProjectService projectService) {
+        this.projectService = projectService;
     }
 
     @GetMapping
-    public ResponseEntity<List<ProjectResponseDTO>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<Page<ProjectResponseDTO>> findAll(
+            @RequestParam(required = false) String technology,
+            Pageable pageable) {
+        Page<ProjectResponseDTO> page = projectService.findAll(technology, pageable);
+        return ResponseEntity.ok(page);
+    }
+
+    @PostMapping("/{id}/feedbacks")
+    public ResponseEntity<FeedbackResponseDTO> addFeedback(
+            @PathVariable Long id,
+            @Valid @RequestBody FeedbackRequestDTO dto) {
+        FeedbackResponseDTO response = projectService.addFeedback(id, dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PutMapping("/{id}/upvote")
+    public ResponseEntity<ProjectResponseDTO> upvote(@PathVariable Long id) {
+        ProjectResponseDTO response = projectService.upvote(id);
+        return ResponseEntity.ok(response);
     }
 }
