@@ -13,8 +13,7 @@ public class HomeController {
         return Map.of(
             "status", "online",
             "message", "DevShowcase API está rodando com sucesso!",
-            "swagger_docs", "/swagger-ui/index.html",
-            "projects_endpoint", "/api/projects"
+            "swagger_docs", "/swagger-ui/index.html"
         );
     }
 }
