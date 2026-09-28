@@ -11,9 +11,10 @@ public class HomeController {
     @GetMapping("/")
     public Map<String, String> home() {
         return Map.of(
-            "message", "DevShowcase API está online!",
-            "swagger", "/swagger-ui/index.html",
-            "projects", "/api/projects"
+            "status", "online",
+            "message", "DevShowcase API está rodando com sucesso!",
+            "swagger_docs", "/swagger-ui/index.html",
+            "projects_endpoint", "/api/projects"
         );
     }
 }
