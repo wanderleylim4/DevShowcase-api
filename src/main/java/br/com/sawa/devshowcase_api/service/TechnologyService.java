@@ -1,6 +1,7 @@
 package br.com.sawa.devshowcase_api.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 import br.com.sawa.devshowcase_api.dto.*;
 import br.com.sawa.devshowcase_api.model.Profile;
 import br.com.sawa.devshowcase_api.repository.ProfileRepository;
@@ -15,7 +16,8 @@ public class TechnologyService {
     }
     @Transactional(readOnly = true)
     public ProfileResponseDTO findById(Long id) {
-        Profile profile = repository.findById(id).orElseThrow(() -> new RuntimeException("Perfil não encontrado com o ID: " + id));
+        Long nonNullId = Objects.requireNonNull(id, "O ID não pode ser nulo");
+        Profile profile = repository.findById(nonNullId).orElseThrow(() -> new RuntimeException("Perfil não encontrado com o ID: " + id));
         return new ProfileResponseDTO(profile);
     }
 }

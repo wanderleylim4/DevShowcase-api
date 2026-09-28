@@ -31,14 +31,14 @@ public class ProjectController {
 
     @PostMapping("/{id}/feedbacks")
     public ResponseEntity<FeedbackResponseDTO> addFeedback(
-            @PathVariable Long id,
+            @PathVariable long id,
             @Valid @RequestBody FeedbackRequestDTO dto) {
         FeedbackResponseDTO response = projectService.addFeedback(id, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}/upvote")
-    public ResponseEntity<ProjectResponseDTO> upvote(@PathVariable Long id) {
+    public ResponseEntity<ProjectResponseDTO> upvote(@PathVariable long id) {
         ProjectResponseDTO response = projectService.upvote(id);
         return ResponseEntity.ok(response);
     }

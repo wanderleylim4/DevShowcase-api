@@ -10,6 +10,7 @@ import br.com.sawa.devshowcase_api.repository.FeedbackRepository;
 import br.com.sawa.devshowcase_api.repository.ProjectRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public FeedbackResponseDTO addFeedback(Long projectId, FeedbackRequestDTO dto) {
+    public FeedbackResponseDTO addFeedback(@NonNull Long projectId, FeedbackRequestDTO dto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Projeto não encontrado com o ID: " + projectId));
 
@@ -50,7 +51,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public ProjectResponseDTO upvote(Long projectId) {
+    public ProjectResponseDTO upvote(@NonNull Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ResourceNotFoundException("Projeto não encontrado com o ID: " + projectId));
 
